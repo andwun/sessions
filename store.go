@@ -21,7 +21,7 @@ import (
 // See CookieStore and FilesystemStore for examples.
 type Store interface {
 	// Get should return a cached session.
-	Get(r *http.Request, name string) (*Session, *http.Request, error)
+	Get(r *http.Request, name string) (*Session, error)
 
 	// New should create and return a new session.
 	//
@@ -76,12 +76,12 @@ type CookieStore struct {
 //
 // It returns a new session and an error if the session exists but could
 // not be decoded.
-func (s *CookieStore) Get(r *http.Request, name string) (*Session, *http.Request, error) {
-	var reg *Registry
-	reg, r = GetRegistry(r)
+func (s *CookieStore) Get(r *http.Request, name string) (*Session, error) {
+	reg, req := GetRegistry(r)
 	ses, err := reg.Get(s, name)
+	*r = *req
 
-	return ses, r, err
+	return ses, err
 }
 
 // New returns a session for the given name without adding it to the registry.
@@ -183,12 +183,12 @@ func (s *FilesystemStore) MaxLength(l int) {
 // Get returns a session for the given name after adding it to the registry.
 //
 // See CookieStore.Get().
-func (s *FilesystemStore) Get(r *http.Request, name string) (*Session, *http.Request, error) {
-	var reg *Registry
-	reg, r = GetRegistry(r)
+func (s *FilesystemStore) Get(r *http.Request, name string) (*Session, error) {
+	reg, req := GetRegistry(r)
 	ses, err := reg.Get(s, name)
+	*r = *req
 
-	return ses, r, err
+	return ses, err
 }
 
 // New returns a session for the given name without adding it to the registry.

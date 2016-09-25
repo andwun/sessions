@@ -48,7 +48,7 @@ func TestFlashes(t *testing.T) {
 	req, _ = http.NewRequest("GET", "http://localhost:8080/", nil)
 	rsp = NewRecorder()
 	// Get a session.
-	if session, req, err = store.Get(req, "session-key"); err != nil {
+	if session, err = store.Get(req, "session-key"); err != nil {
 		t.Fatalf("Error getting session: %v", err)
 	}
 	// Get a flash.
@@ -71,7 +71,7 @@ func TestFlashes(t *testing.T) {
 		t.Fatal("No cookies. Header:", hdr)
 	}
 
-	if _, req, err = store.Get(req, "session:key"); err.Error() != "sessions: invalid character in cookie name: session:key" {
+	if _, err = store.Get(req, "session:key"); err.Error() != "sessions: invalid character in cookie name: session:key" {
 		t.Fatalf("Expected error due to invalid cookie name")
 	}
 
@@ -81,7 +81,7 @@ func TestFlashes(t *testing.T) {
 	req.Header.Add("Cookie", cookies[0])
 	rsp = NewRecorder()
 	// Get a session.
-	if session, req, err = store.Get(req, "session-key"); err != nil {
+	if session, err = store.Get(req, "session-key"); err != nil {
 		t.Fatalf("Error getting session: %v", err)
 	}
 	// Check all saved values.
@@ -114,7 +114,7 @@ func TestFlashes(t *testing.T) {
 	req, _ = http.NewRequest("GET", "http://localhost:8080/", nil)
 	rsp = NewRecorder()
 	// Get a session.
-	if session, req, err = store.Get(req, "session-key"); err != nil {
+	if session, err = store.Get(req, "session-key"); err != nil {
 		t.Fatalf("Error getting session: %v", err)
 	}
 	// Get a flash.
@@ -141,7 +141,7 @@ func TestFlashes(t *testing.T) {
 	req.Header.Add("Cookie", cookies[0])
 	rsp = NewRecorder()
 	// Get a session.
-	if session, req, err = store.Get(req, "session-key"); err != nil {
+	if session, err = store.Get(req, "session-key"); err != nil {
 		t.Fatalf("Error getting session: %v", err)
 	}
 	// Check all saved values.
