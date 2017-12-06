@@ -77,7 +77,11 @@ type CookieStore struct {
 // It returns a new session and an error if the session exists but could
 // not be decoded.
 func (s *CookieStore) Get(r *http.Request, name string) (*Session, error) {
-	return GetRegistry(r).Get(s, name)
+	reg, req := GetRegistry(r)
+	ses, err := reg.Get(s, name)
+	*r = *req
+
+	return ses, err
 }
 
 // New returns a session for the given name without adding it to the registry.
@@ -180,7 +184,11 @@ func (s *FilesystemStore) MaxLength(l int) {
 //
 // See CookieStore.Get().
 func (s *FilesystemStore) Get(r *http.Request, name string) (*Session, error) {
-	return GetRegistry(r).Get(s, name)
+	reg, req := GetRegistry(r)
+	ses, err := reg.Get(s, name)
+	*r = *req
+
+	return ses, err
 }
 
 // New returns a session for the given name without adding it to the registry.
