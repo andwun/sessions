@@ -2,8 +2,6 @@
 
 package sessions
 
-import "net/http"
-
 // Options stores configuration for a session or session store.
 //
 // Fields are a subset of http.Cookie fields.
@@ -18,5 +16,5 @@ type Options struct {
 	Secure   bool
 	HttpOnly bool
 	// Defaults to http.SameSiteDefaultMode
-	SameSite http.SameSite
+	SameSite SameSite
 }

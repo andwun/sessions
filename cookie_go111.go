@@ -14,7 +14,6 @@ func newCookieFromOptions(name, value string, options *Options) *http.Cookie {
 		MaxAge:   options.MaxAge,
 		Secure:   options.Secure,
 		HttpOnly: options.HttpOnly,
-		SameSite: options.SameSite,
+		SameSite: http.SameSite(options.SameSite),
 	}
-
 }
