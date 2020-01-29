@@ -9,6 +9,7 @@ import (
 	"encoding/gob"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 )
 
@@ -208,6 +209,34 @@ func TestCookieStoreMapPanic(t *testing.T) {
 	err = session.Save(req, w)
 	if err != nil {
 		t.Fatal("failed to save session", err)
+	}
+}
+
+func TestCookieStoreSameSiteNoneMode(t *testing.T) {
+	store := NewCookieStore([]byte("aaa0defe5d2839cbc46fc4f080cd7adc"))
+	store.Options.SameSite = SameSiteNoneMode
+
+	req, err := http.NewRequest("GET", "http://www.example.com", nil)
+	if err != nil {
+		t.Fatal("failed to create request", err)
+	}
+	w := httptest.NewRecorder()
+
+	session, err := store.New(req, "hello")
+	if err != nil {
+		t.Fatalf("failed to create session: %s", err)
+	}
+
+	session.Values["data"] = "hello-world"
+
+	err = session.Save(req, w)
+	if err != nil {
+		t.Fatal("failed to save session", err)
+	}
+
+	setCookieHeader := w.Header().Get("Set-Cookie")
+	if !strings.Contains(setCookieHeader, "SameSite=None") {
+		t.Fatalf("Set-Cookie header does not contain option SameSite=None: %s", setCookieHeader)
 	}
 }
 
